@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/tr.js"></script>
+    <title>Intense Bungalov - Rezervasyon</title>
+</head>
+<body>
+     <!-- Topbar -->
+    <div class="header">
+        <div class="top-bar">
+            <span></span>
+            <div class="top-links">
+                <a href="about">Hakkımızda</a>
+                <a href="contact">İletişim</a>
+                <a href="sss">SSS</a>
+            </div>
+        </div>
+        <div class="bottom-bar">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="header-logo" onclick="window.location.href='/'">
+            <div class="bottom-links">
+                <a href="/"><iconify-icon width="22" height="22" icon="material-symbols:bungalow-outline-rounded"></iconify-icon>Ana Sayfa</a>
+                <a href="bungalows"><iconify-icon width="22" height="22" icon="healthicons:village-24px"></iconify-icon>Bungalovlarımız</a>
+                <a href="gallery"><iconify-icon width="19" height="19" icon="solar:gallery-round-bold"></iconify-icon> Galeri</a>
+                <a href="reservation"><iconify-icon width="20" height="20" icon="pajamas:calendar"></iconify-icon>Rezervasyon Yap</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reservation Form -->
+    <div class="reservation-container">
+        <div class="reservation-wrapper">
+            <div class="reservation-form">
+                <h1>Bungalov Rezervasyonu</h1>
+                
+                <div class="success-message" id="successMessage">
+                    ✓ Rezervasyonunuz başarıyla gönderildi!
+                </div>
+                <div class="error-message" id="errorMessage"></div>
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Gönderiliyor...</p>
+                </div>
+
+                <form id="reservationForm">
+                    <div class="form-group">
+                        <label for="name">Ad Soyad *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">E-mail *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Telefon *</label>
+                        <input type="text" id="phone" name="phone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="guests">Misafir Sayısı *</label>
+                        <input type="number" id="guests" name="guests" min="1" max="10" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bungalow">Bungalov Türü *</label>
+                        <select id="bungalow" name="bungalow" required>
+                            <option value="">Bir bungalov seçiniz</option>
+                            <option value="Akasya">Akasya</option>
+                            <option value="Ihlamur">Ihlamur</option>
+                            <option value="Mese">Meşe</option>
+                            <option value="Palmiye">Palmiye</option>
+                            <option value="Zeytin">Zeytin</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Notlar</label>
+                        <textarea id="notes" name="notes" style="width: 100%; padding: 12px; border: 2px solid #0C4848; border-radius: 5px; font-size: 16px; box-sizing: border-box; font-family: Arial; resize: vertical; min-height: 100px;"></textarea>
+                    </div>
+
+                    <!-- Hidden inputs for dates -->
+                    <input type="hidden" id="checkIn" name="checkIn">
+                    <input type="hidden" id="checkOut" name="checkOut">
+
+                    <button type="submit" class="submit-btn">Rezervasyon Yap</button>
+                </form>
+            </div>
+
+            <!-- Right: Calendar -->
+            <div class="calendar-section">
+                <h2>Tarih Seçimi</h2>
+                <input type="text" id="dateRange" name="dateRange" placeholder="Sağdaki takvimden tarih seçiniz" readonly>
+                
+                <div class="selected-dates" id="selectedDates">
+                    <p>Giriş Tarihi: <span id="checkInDisplaySpan">-</span></p>
+                    <p>Çıkış Tarihi: <span id="checkOutDisplaySpan">-</span></p>
+                    <div class="night-count" id="nightCount"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedDates = [];
+
+        // Initialize calendar with range selection
+        flatpickr("#dateRange", {
+            mode: "range",
+            minDate: "today",
+            dateFormat: "d.m.Y",
+            locale: "tr",
+            inline: true,
+            onChange: function(selectedDates) {
+                if (selectedDates.length === 2) {
+                    const checkIn = selectedDates[0];
+                    const checkOut = selectedDates[1];
+
+                    // Format dates for backend (YYYY-MM-DD)
+                    const checkInStr = checkIn.toISOString().split('T')[0];
+                    const checkOutStr = checkOut.toISOString().split('T')[0];
+
+                    // Set hidden inputs
+                    document.getElementById('checkIn').value = checkInStr;
+                    document.getElementById('checkOut').value = checkOutStr;
+
+                    // Format dates for display (DD.MM.YYYY)
+                    const dayIn = String(checkIn.getDate()).padStart(2, '0');
+                    const monthIn = String(checkIn.getMonth() + 1).padStart(2, '0');
+                    const yearIn = checkIn.getFullYear();
+
+                    const dayOut = String(checkOut.getDate()).padStart(2, '0');
+                    const monthOut = String(checkOut.getMonth() + 1).padStart(2, '0');
+                    const yearOut = checkOut.getFullYear();
+
+                    document.getElementById('checkInDisplaySpan').textContent = `${dayIn}.${monthIn}.${yearIn}`;
+                    document.getElementById('checkOutDisplaySpan').textContent = `${dayOut}.${monthOut}.${yearOut}`;
+
+                    // Show selected dates
+                    document.getElementById('selectedDates').classList.add('active');
+
+                    // Calculate nights
+                    const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+                    document.getElementById('nightCount').textContent = `${nights} Gece`;
+                }
+            }
+        });
+
+        document.getElementById('reservationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Validate dates are selected
+            if (!document.getElementById('checkIn').value || !document.getElementById('checkOut').value) {
+                showError('Lütfen takvimden giriş ve çıkış tarihini seçiniz.');
+                return;
+            }
+
+            // Get form data
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                checkIn: document.getElementById('checkIn').value,
+                checkOut: document.getElementById('checkOut').value,
+                guests: document.getElementById('guests').value,
+                bungalow: document.getElementById('bungalow').value,
+                notes: document.getElementById('notes').value
+            };
+
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+
+            try {
+                // Send to backend
+                const response = await fetch('/api/reservation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Success
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('reservationForm').reset();
+                    document.getElementById('selectedDates').classList.remove('active');
+                    
+                    // Hide success message after 5 seconds
+                    setTimeout(() => {
+                        document.getElementById('successMessage').style.display = 'none';
+                    }, 5000);
+                } else {
+                    showError(result.message || 'Bir hata oluştu. Lütfen tekrar deneyiniz.');
+                }
+            } catch (error) {
+                showError('Sunucuya bağlanılamadı. Lütfen tekrar deneyiniz.');
+                console.error('Error:', error);
+            }
+
+            document.getElementById('loading').style.display = 'none';
+        });
+
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorMessage').style.display = 'block';
+            
+            setTimeout(() => {
+                document.getElementById('errorMessage').style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

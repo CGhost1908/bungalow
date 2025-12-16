@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/x-icon">
+    <title>Intense Bungalov</title>
+</head>
+<body>
+    <!-- Topbar -->
+    <div class="header">
+        <div class="top-bar">
+            <span></span>
+            <div class="top-links">
+                <a href="about">Hakkımızda</a>
+                <a href="contact">İletişim</a>
+                <a href="sss">SSS</a>
+            </div>
+        </div>
+        <div class="bottom-bar">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="header-logo" onclick="window.location.href='/'">
+            <div class="bottom-links">
+                <a href="/"><iconify-icon width="22" height="22" icon="material-symbols:bungalow-outline-rounded"></iconify-icon>Ana Sayfa</a>
+                <a href="bungalows"><iconify-icon width="22" height="22" icon="healthicons:village-24px"></iconify-icon>Bungalovlarımız</a>
+                <a href="gallery"><iconify-icon width="19" height="19" icon="solar:gallery-round-bold"></iconify-icon> Galeri</a>
+                <a href="reservation"><iconify-icon width="20" height="20" icon="pajamas:calendar"></iconify-icon>Rezervasyon Yap</a>
+            </div>
+        </div>
+    </div>
+    <!-- Content -->
+    <div class="content">
+        <div class="trailer">
+            <video autoplay muted loop class="background-video">
+                <source src="{{ url_for('static', filename='/videos/bungalow.mp4') }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="about">
+
+        </div>
+        <div class="contact">
+            
+        </div>
+        <div class="sss">
+
+        </div>
+        <div class="footer">
+            <!--
+            <p>&copy; 2024 Intense Bungalov. Tüm hakları saklıdır.</p>
+            -->
+        </div>
+    </div>
+</body>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</html>
