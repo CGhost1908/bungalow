@@ -30,6 +30,19 @@
                 <a href="gallery"><iconify-icon width="19" height="19" icon="solar:gallery-round-bold"></iconify-icon> Galeri</a>
                 <a href="reservation"><iconify-icon width="20" height="20" icon="pajamas:calendar"></iconify-icon>Rezervasyon Yap</a>
             </div>
+            <button class="hamburger-btn" id="hamburgerBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-links">
+                <a href="/">Ana Sayfa</a>
+                <a href="bungalows">Bungalovlarımız</a>
+                <a href="gallery">Galeri</a>
+                <a href="reservation">Rezervasyon Yap</a>
+            </div>
         </div>
     </div>
 
@@ -222,6 +235,20 @@
                 document.getElementById('errorMessage').style.display = 'none';
             }, 5000);
         }
+
+        // Hamburger menu toggle
+        document.getElementById('hamburgerBtn').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            this.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.mobile-menu-links a').forEach(link => {
+            link.addEventListener('click', function() {
+                document.getElementById('hamburgerBtn').classList.remove('active');
+                document.getElementById('mobileMenu').classList.remove('active');
+            });
+        });
     </script>
 </body>
 </html>

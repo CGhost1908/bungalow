@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
     <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/x-icon">
-    <title>Intense Bungalov</title>
+    <title>Intense Bungalov - Bungalovlarımız</title>
 </head>
 <body>
     <!-- Topbar -->
@@ -42,27 +42,39 @@
             </div>
         </div>
     </div>
-    <!-- Content -->
-    <div class="content">
-        <div class="trailer">
-            <video autoplay muted loop class="background-video">
-                <source src="{{ url_for('static', filename='/videos/bungalow.mp4') }}" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
-        <div class="about">
+    
+    <div class="bungalows-container">
+        <h1 class="bungalows-title">Bungalovlarımız</h1>
+        
+        <div class="bungalows-grid" id="bungalowsGrid">
 
         </div>
-        <div class="contact">
+    </div>
+
+    <div class="modal" id="bungalowModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div class="modal-slider">
+                <img src="" id="modalImage" class="modal-image" alt="Bungalow">
+                <button class="slider-btn prev" onclick="prevImage()">&lt;</button>
+                <button class="slider-btn next" onclick="nextImage()">&gt;</button>
+                <div class="slider-dots" id="sliderDots"></div>
+            </div>
+            <h2 class="modal-title" id="modalName"></h2>
             
-        </div>
-        <div class="sss">
-
-        </div>
-        <div class="footer">
-            <!--
-            <p>&copy; 2024 Intense Bungalov. Tüm hakları saklıdır.</p>
-            -->
+            <div class="modal-specs" id="modalSpecs"></div>
+            
+            <p class="modal-description" id="modalDescription"></p>
+            
+            <div class="modal-features" id="modalFeatures"></div>
+            
+            <div class="modal-footer">
+                <div class="modal-price">
+                    <div class="modal-price-amount" id="modalPrice"></div>
+                    <div class="modal-price-label">Gece / Başına</div>
+                </div>
+                <button class="modal-reserve-btn" onclick="goToReservation()">Rezervasyon Yap</button>
+            </div>
         </div>
     </div>
 </body>
@@ -74,7 +86,6 @@
         mobileMenu.classList.toggle('active');
     });
 
-    // Close menu when a link is clicked
     document.querySelectorAll('.mobile-menu-links a').forEach(link => {
         link.addEventListener('click', function() {
             document.getElementById('hamburgerBtn').classList.remove('active');
@@ -82,4 +93,4 @@
         });
     });
 </script>
-</body>
+</html>

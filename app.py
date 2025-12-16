@@ -25,6 +25,14 @@ def home():
 def reservation():
     return render_template('reservation.html')
 
+@app.route('/bungalows')
+def bungalows():
+    return render_template('bungalows.html')
+
+@app.route('/gallery')
+def gallery():
+    return render_template('gallery.html')
+
 @app.route('/api/reservation', methods=['POST'])
 def create_reservation():
     try:

@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
     <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/x-icon">
-    <title>Intense Bungalov</title>
+    <title>Intense Bungalov - Galeri</title>
 </head>
 <body>
     <!-- Topbar -->
@@ -42,29 +42,25 @@
             </div>
         </div>
     </div>
-    <!-- Content -->
-    <div class="content">
-        <div class="trailer">
-            <video autoplay muted loop class="background-video">
-                <source src="{{ url_for('static', filename='/videos/bungalow.mp4') }}" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
-        <div class="about">
 
-        </div>
-        <div class="contact">
-            
-        </div>
-        <div class="sss">
+    <div class="gallery-container">
+        <h1 class="gallery-title">Galeri</h1>
 
-        </div>
-        <div class="footer">
-            <!--
-            <p>&copy; 2024 Intense Bungalov. Tüm hakları saklıdır.</p>
-            -->
+        <div id="gallerySections"></div>
+    </div>
+
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+            <button class="lightbox-nav prev" onclick="prevLightboxImage()">&lt;</button>
+            <img src="" id="lightboxImage" class="lightbox-image" alt="Gallery Image">
+            <button class="lightbox-nav next" onclick="nextLightboxImage()">&gt;</button>
+            <div class="lightbox-info">
+                <span id="lightboxCounter"></span>
+            </div>
         </div>
     </div>
+
 </body>
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 <script>
@@ -74,7 +70,6 @@
         mobileMenu.classList.toggle('active');
     });
 
-    // Close menu when a link is clicked
     document.querySelectorAll('.mobile-menu-links a').forEach(link => {
         link.addEventListener('click', function() {
             document.getElementById('hamburgerBtn').classList.remove('active');
@@ -82,4 +77,4 @@
         });
     });
 </script>
-</body>
+</html>
